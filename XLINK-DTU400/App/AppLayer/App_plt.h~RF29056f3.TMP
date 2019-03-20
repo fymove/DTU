@@ -1,0 +1,437 @@
+#ifndef _APP_PLT_H_
+#define _APP_PLT_H_
+
+#ifndef _InPlt
+#define PltExt  extern
+#else
+#define PltExt
+#endif
+
+#define   MONITOR_METER_ON 1
+
+
+#include "typedef.h"
+#include "app_vfd.h"
+
+typedef enum {
+    PLT_PRESSURE = 0,                                               //0  供气压力
+    PLT_TEMPERATURE,                                                //1  排气温度
+    PLT_PWR_VOLT,                                                   //2  电源电压    
+    PLT_STATUS_1,                                                   //3  状态1    
+    PLT_CURRENT_A,                                                  //4  A项电流
+    PLT_CURRENT_B,                                                  //5  B项电流
+    PLT_CURRENT_C,                                                  //6  C项电流
+    PLT_FAN_CURRENTA,                                               //7  风机电流A
+    PLT_FAN_CURRENTB,                                               //8  风机电流B
+    PLT_FAN_CURRENTC,                                               //9  风机电流C
+    
+    PLT_MAIN_OUT_FREQ,                                              //10  主机输出频率
+    PLT_MAIN_OUT_SPEED,                                             //11  主机转速
+    PLT_MAIN_OUT_CURR,                                              //12  主机输出电流
+    PLT_MAIN_OUT_VOLT,                                              //13  主机输出电压
+    PLT_MAIN_OUT_POWER,                                             //14  主机输出功率
+    
+    PLT_FAN_OUT_FREQ,                                               //15  风机输出频率
+    PLT_FAN_OUT_SPEED,                                              //16  风机转速
+    PLT_FAN_OUT_CURR,                                               //17  风机输出电流
+    PLT_FAN_OUT_VOLT,                                               //18  风机输出电压
+    PLT_FAN_OUT_POWER,                                              //19  风机输出功率
+
+    PLT_MAIN_POWER_CONSUME,                                         //20    主累用电 
+    PLT_MAIN_POWER_CONSUME_LOW,                                     //21    主累用电低位 
+    PLT_FAN_POWER_CONSUME,                                             //22    风累用电 
+    PLT_FAN_POWER_CONSUME_LOW,                                         //23    风累用电低位          
+    PLT_PFREQ_MAIN_POWER_CONSUME,                                     //24    工主累用电 
+    PLT_PFREQ_MAIN_POWER_CONSUME_LOW,                                 //25    工主累用电低位  
+    PLT_PFREQ_FAN_POWER_CONSUME,                                     //26    工风累用电
+    PLT_PFREQ_FAN_POWER_CONSUME_LOW,                                 //27    工风累用电低位 
+    
+    PLT_FRONT_BEAR_TEMP,                                             //28    前轴温
+    PLT_REAR_BEAR_TEMP,                                             //29    后轴温 
+    
+    PLT_RUN_TIME,                                                   //30  运行时间
+    PLT_RUN_TIME_MINUTE,											//31  历史运行时间分钟 
+    PLT_LOAD_TIME,                                                  //32  历史加载时间
+    PLT_LOAD_TIME_MINUTE,											//33  历史加载时间分钟
+    PLT_OILFILT_TIME,                                               //34  油滤器使用时间
+    PLT_OILSEPA_TIME,                                               //35  油分器使用时间
+    PLT_GASFILT_TIME,                                               //36  空滤器使用时间
+    PLT_LUBE_TIME,                                                  //37  润滑油使用时间
+    PLT_GREASE_TIME,                                                //38  润滑脂使用时间
+    
+    PLT_MAX_USE_TIME,                                               //39最大使用时间
+    PLT_OILFILT_MAX_HOUR,                                           //40 油滤器最大使用
+    PLT_OILSEPA_MAX_HOUR,                                           //41  油分器最大使用  
+    PLT_GASFILT_MAX_HOUR,                                           //42  空滤器最大使用
+    PLT_LUBE_MAX_HOUR,                                              //43  润滑油最大使用
+    PLT_GREAS_MAX_HOUR,                                             //44  润滑脂最大使用
+    PLT_UNLOAD_PRESS,                                               //45  卸载压力
+    PLT_LOAD_PRESS,                                                 //46  加载压力
+    PLT_MAIN_CFREQ_PRESS,                                             //47    主变压力 
+    PLT_STOP_PRESS,                                                 //48  供气停机压力
+    PLT_UNLOAD_MAX_PRESS,                                           //49  卸载压力高限
+    PLT_FAN_STOP_TEMP,                                              //50  停止温度 
+    PLT_FAN_START_TEMP,                                             //51  启动温度
+    PLT_FAN_CFREQ_TEMP,                                             //52    风变温度
+    PLT_PRALARM_TEMP,                                               //53  预警温度
+    PLT_ALARM_TEMP,                                                 //54  停机温度
+    PLT_START_DELAY,                                                //55  重启延时
+    PLT_LOAD_DELAY,                                                 //56  加载延时
+
+
+
+    PLT_UNLOAD_DELAY,                                               //57  空载延时
+    PLT_STOP_DELAY,                                                 //58  停机延时
+   
+    PLT_MAIN_RATE_CURR,                                             //59  主机额定电流   
+    PLT_CURR_UNBALANCE,                                             //60  电流不平衡度    
+    PLT_MAIN_DELAY,                                                 //61  主机启动延时
+    PLT_XINJIAO_DELAY,                                              //62  星角延时
+    PLT_FAN_RATE_CURR,                                              //63  风机额定电流
+    PLT_FAN_DELAY,                                                  //64  风机启动延时
+    PLT_USR_PASSWORD,                                               //65  用户密码
+    PLT_FAC_PASSWORD,                                               //66  厂家密码    
+   
+    PLT_STATUS_2,                                                   //67状态2     无对应KEY
+    PLT_PRE_ALARM,                                                    //68预警        无对应KEY
+    PLT_RUN_STATA,                                                    //69运行状态    无对应KEY
+    PLT_FAULT,                                                        //70故障        无对应KEY
+
+    PLT_MAIN_ALARM_VALUE,                                            //71  主机变频报警值
+    PLT_MAIN_RUN_STATE,                                                //72  主机变频运行状态
+    PLT_MAIN_TOPLIMIT_FREQ,                                            //73  主机变频上限频率
+    PLT_MAIN_LOWLIMIT_FREQ,                                            //74  主机变频下限频率
+    PLT_MAIN_ACC_TIME,                                                //75 主机变频 加速时间
+    PLT_MAIN_DEC_TIME,                                                //76  主机变频 减速时间
+    PLT_MAIN_MODEL,                                                    //77  主机变频型号
+
+    PLT_FAN_ALARM_VALUE,                                            //78 风机变频报警值
+    PLT_FAN_RUN_STATE,                                                //79 风机变频运行状态
+    PLT_FAN_TOPLIMIT_FREQ,                                            //80 风机变频上限频率
+    PLT_FAN_LOWLIMIT_FREQ,                                            //81 风机变频下限频率
+    PLT_FAN_ACC_TIME,                                                //82 风机变频 加速时间
+    PLT_FAN_DEC_TIME,                                                //83 风机变频 减速时间
+    PLT_FAN_MODEL,                                                    //84 风机变频型号
+    
+    //MAM6080额外新增参数96个
+    PLT_SysPressure,        // 系统压力
+    PLT_PhaseProVolt,        // 相序保护电压
+    PLT_OpenPhaseProVolt,    // 缺相保护电压
+    PLT_Volt,                // 电压
+    PLT_WarningValue,        // 预警值
+    PLT_RunStatus,            // 运行状态
+    PLT_Timing,                // 计时
+    PLT_Fault,                // 故障
+    PLT_FaultValue,            // 故障值
+    PLT_OilPressDif,        // 油分压差
+    PLT_MainStatus,            // 主机状态字
+    PLT_MainFault,            // 主机故障字
+    PLT_FanStatus,            // 风机状态字
+    PLT_FanFault,            // 风机故障字
+    PLT_MainPfreqPowerThis,    // 工频主机本次用电
+    PLT_FanPfreqPowerThis,    // 工频风机本次用电
+    PLT_MainPfreqUI,        // 工频主机UI
+    PLT_FanPfreqUI,            // 工频风机UI
+    
+    
+    PLT_TempUnit,                // 温度单位
+    PLT_PressureUnit,            // 压力单位
+    PLT_WarningStop,            // 预警过久停机
+    PLT_FrontBearingWarnTemp,    // 前轴承预警温度
+    PLT_FrontBearingAlarmTemp,    // 前轴承报警温度
+    PLT_OilPressDifWarn,        // 油分预警压差
+    PLT_OilPressDifAlarm,        // 油分报警压差
+    PLT_DrainOpenDelay,            // 排水开延时
+    PLT_DrainCloseDelay,        // 排水关延时
+    PLT_SoftStartDelay,            // 软启延时
+    PLT_AssistStartTime,        // 辅助启动时间
+    PLT_AssistLoadDelay,        // 辅助加载延时
+    PLT_AssistUnloadDelay,        // 辅助卸载延时
+    PLT_AssistStartTemp,        // 辅助启温度
+    PLT_LoadMode,                // 加载方式
+    PLT_StartStopMode,            // 启停方式
+    PLT_CorrespondMode,            // 通信方式
+    PLT_LanguageSelection,        // 语言选择
+    PLT_RunMode,                // 运行方式
+    PLT_SysStopPressure,        // 系统停机压力
+    PLT_HistoryFaultReset,        // 历史故障复位
+    PLT_FactoryCode1,            // 出厂编码1
+    PLT_FactoryCode2,            // 出厂编码2
+    PLT_FactoryDate,            // 出厂日期
+    
+    
+    PLT_MainIntegInitValue,        // 主机积分初值
+    PLT_MainIntegRange,            // 主机积分范围
+    PLT_MainRatioGain,            // 主机比例增益
+    PLT_MainIntegGain,            // 主机积分增益
+    PLT_MainDiffGain,            // 主机微分增益
+    PLT_MainFreqToplimit,        // 主机频率上限
+    PLT_MainFreqLowlimit,        // 主机频率下限
+    PLT_MainIdlingFreq,            // 主机空载频率
+    PLT_MainVfdNum,                // 主机变频器站号
+    PLT_MainPIDPeriod,            // 主机PID周期
+    PLT_MainVfdModel,            // 主机变频器型号
+    PLT_FanIntegInitValue,        // 风机积分初值
+    PLT_FanIntegRange,            // 风机积分范围
+    PLT_FanRatioGain,            // 风机比例增益
+    PLT_FanIntegGain,            // 风机积分增益
+    PLT_FanDiffGain,            // 风机微分增益
+    PLT_FanFreqToplimit,        // 风机频率上限
+    PLT_FanFreqLowlimit,        // 风机频率下限
+    PLT_FanIdlingFreq,            // 风机空载频率
+    PLT_FanVfdNum,                // 风机变频器站号
+    PLT_FanPIDPeriod,            // 风机PID周期
+    PLT_FanVfdModel,            // 风机变频器型号
+    PLT_VoltOvertop,            // 电压过高
+    PLT_VoltOverlow,            // 电压过低
+    PLT_CorrespondOverTime,        // 通信超时
+
+
+    PLT_ReFreqPressure,            // 降频压力
+    PLT_MainRiseRate,            // 主机上升速率
+    PLT_MainDownRate,            // 主机下降速率
+    PLT_MainPower,                // 主机功率
+    PLT_MainRotationRate,        // 主机转速
+    PLT_FanRiseRate,            // 风机上升速率
+    PLT_FanDownRate,            // 风机下降速率
+    PLT_FanPower,                // 风机功率
+    PLT_FanRotationRate,        // 风机转速
+    PLT_FanFreqStart,            // 变频风机启
+    PLT_FanFreqStop,            // 变频风机停
+    PLT_MainStopMode,            // 主机停机方式
+    PLT_TimeStartStopFunc,        // 定时启停功能
+    PLT_TimePressureFunc,        // 定时压力功能
+    PLT_LowTempProtect,            // 低温保护
+    PLT_MainVfdStartMode,        // 主变频器启动方式
+    PLT_FanVfdStartMode,        // 风机变频器启动方式
+    PLT_CorrespondStartVfdNum,    // 通信启变频器次数
+    PLT_CorrespondStopVfdNum,    // 通信停变频器次数
+    PLT_MainPfreqPowerFactor,    // 工频主机功率系数
+    PLT_MainfreqPowerFactor,    // 变频主机功率系数
+    PLT_FanPfreqPowerFactor,    // 变频风机功率系数
+    PLT_FanfreqPowerFactor,        // 工频风机功率系数
+    PLT_ProMainVfdDelay,        // 预开主机变频器延时
+    PLT_PowerDownRestart,        // 掉电重启功能
+    PLT_FreqSelect,                // 频率选择
+    PLT_PipePressure,            // 管路压阻
+    PLT_RearBearingWarnTemp,    // 后轴承预警温度
+    PLT_RearBearingAlarmTemp,    // 后轴承停机温度
+    
+    
+    PLT_ALLOW_WRITE,            //写标识  无对应KEY
+    
+}VFD_PLT_ENYM;
+
+
+typedef enum {
+    PLT_Man_PRESSURE = 0,                                               //  供气压力
+    PLT_Man_TEMPERATURE,                                                //  排气温度
+    
+    PLT_Man_RUN_TIME,                                                   //  运行时间
+    PLT_Man_LOAD_TIME,                                                  //  加载时间
+    
+    PLT_Man_CURRENT_A,                                                  //  主机A项电流
+    PLT_Man_CURRENT_B,                                                  //  主机B项电流
+    PLT_Man_CURRENT_C,                                                  //  主机C项电流
+        
+    PLT_Man_STATUS_1,                                                   //  状态1    
+    PLT_Man_STATUS_2,                                                   //  状态2  无对应KEY
+    
+    PLT_Man_OILFILT_TIME,                                               //  油滤器使用时间
+    PLT_Man_OILSEPA_TIME,                                               //  油分器使用时间
+    PLT_Man_GASFILT_TIME,                                               //  空滤器使用时间
+    PLT_Man_LUBE_TIME,                                                  //  润滑油使用时间
+    PLT_Man_GREASE_TIME,                                                //  润滑脂使用时间
+    PLT_Man_BELT_TIME,													//  皮带使用时间
+  
+    PLT_Man_FAN_CURRENTA,                                            //  风机电流A
+    PLT_Man_FAN_CURRENTB,                                            //  风机电流B
+    PLT_Man_FAN_CURRENTC,                                            //  风机电流C
+    PLT_Man_PHASE_PROVOLT,
+
+   	PLT_Man_VF_FREQUENCY,              // 变频输出频率
+   	PLT_Man_VF_VOLTAGE,				   // 变频输出电压						
+   	PLT_Man_VF_CURRENT,				   // 变频输出电流
+   	PLT_Man_VF_POWER,				   // 变频输出功率	
+	PLT_Man_VF_ROTATIONL_SPEED,		   // 变频输出转速
+   	PLT_Man_FALT,					   // 故障代码
+   	PLT_Man_WARNING,				   // 预警代码
+   	PLT_Man_OILFILT_MAXTIME,
+   	PLT_Man_OILSEPA_MAXTIME,
+   	PLT_Man_GASFILT_MAXTIME,
+   	PLT_Man_LUBE_MAXTIME,
+   	PLT_Man_GREASE_MAXTIME,
+   	PLT_Man_LOADPRESS,				//加载压力
+   	PLT_Man_UNLOADPRESS,  //卸载压力
+   	PLT_Man_CQUNECEPRESS,   //主机变频目标压力
+   	PLT_Man_START_TEMP,	//启动温度
+   	PLT_Man_STOP_TEMP,  //停机温度
+   	
+    PLT_Man_ALLOW_WRITE                                             //写标识  无对应KEY
+    
+}VFD_PLT_MAM860_ENYM;
+
+
+typedef  enum{
+	H2U_PRESSURE = 0,                                               //0  供气压力
+    H2U_TEMPERATURE,                                                //1  排气温度
+    H2U_PWR_VOLT,                                                   //2  电源电压    
+    H2U_RUNSTATE,                                                   //3 运行状态   
+	H2U_P2PRESSURE,
+
+	H2U_P3PRESSURE,
+	H2U_TEMPERATURE1,
+    H2U_FAN_CURRENTA,                                               //7  风机电流A
+    H2U_FAN_CURRENTB,                                               //8  风机电流B
+    H2U_FAN_CURRENTC,                                               //9  风机电流C
+
+    H2U_MAIN_OUT_FREQ,                                              //10  主机输出频率
+    H2U_MAIN_OUT_CURR,                                              //12  主机输出电流
+    H2U_MAIN_OUT_VOLT,                                              //13  主机输出电压
+    H2U_MAIN_OUT_POWER,                                             //14  主机输出功率
+    H2U_FAN_OUT_FREQ,                                               //15  风机输出频率
+
+    H2U_FAN_OUT_CURR,                                               //17  风机输出电流
+    H2U_FAN_OUT_VOLT,                                               //18  风机输出电压
+    H2U_FAN_OUT_POWER,                                              //19  风机输出功率
+    H2U_RUN_TIME,                                                   //30  运行时间
+    H2U_LOAD_TIME,                                                  //32  历史加载时间
+
+	H2U_CURRENT_RUNTIME,
+	H2U_CURRENT_RUNMINUTE,
+	H2U_WATERFILT_TIME,
+    H2U_GASFILT_TIME,                                               //36  空滤器使用时间
+    H2U_MAX_USE_TIME,                                               //39最大使用时间
+
+    H2U_WATERFILT_MAX_HOUR,                                           //40 油滤器最大使用
+    H2U_GASFILT_MAX_HOUR,                                           //42  空滤器最大使用
+    H2U_UNLOAD_PRESS,                                               //45  卸载压力
+    H2U_LOAD_PRESS,                                                 //46  加载压力
+    H2U_MAIN_CFREQ_PRESS,                                             //47    主变压力 
+
+    H2U_STOP_PRESS,                                                 //48  供气停机压力
+    H2U_UNLOAD_MAX_PRESS,                                           //49  卸载压力高限
+    H2U_FAN_STOP_TEMP,                                              //50  停止温度 
+    H2U_FAN_START_TEMP,                                             //51  启动温度
+    H2U_FAN_CFREQ_TEMP,                                             //52    风变温度
+
+    H2U_PRALARM_TEMP,                                               //53  预警温度
+    H2U_ALARM_TEMP,                                                 //54  停机温度
+	H2U_RUNMODE,													//运行方式
+	H2U_TOTALPOWER_H,
+	H2U_TOTALPOWER_L,
+	H2U_LOWWATERPERTECT,
+
+	H2U_AUTOCHANGEWATER,
+	H2U_AUTOCHANGECYCLE,
+	H2U_MAXTIMEFUNC,
+	H2U_VALVE_STATE,
+	H2U_MAIN_IGBT_TMP                                       
+}VFD_H2U_ENUM;
+
+#if MONITOR_METER_ON
+
+typedef enum {
+
+    XY_VOLTAGE_A,                                                   //  A相电压
+    XY_VOLTAGE_B,                                                   //  B相电压
+    XY_VOLTAGE_C,                                                   //  C相电压
+	XY_VOLTAGE_AB,                                                   //  AB电压
+    XY_VOLTAGE_BC,                                                   //  BC电压
+    XY_VOLTAGE_CA,                                                   //  CA电压
+	XY_CURRENT_A,                                                  //  A相电流
+    XY_CURRENT_B,                                                  //  B相电流
+    XY_CURRENT_C,                                                  //  C相电流
+    
+    xy_ACTIVE_POWER_TOTAL,                                            //总有功功率
+    xy_REACTIVE_POWER_TOTAL,                                        //总无功功率
+    XY_APPARENT_POWER_TOTAL,                                        //总视在功率
+    XY_POWER_FACTOR_TOTAL,                                            //总功率因素
+    XY_FREQUENCY,                                                    //频率
+    XY_POSITIVE_ACTIVE_POWER,                                          //正用功电能  整数
+//    XY_POSITIVE_ACTIVE_POWER_LOW,                                      //正用功电能  低位
+//    XY_POSITIVE_ACTIVE_POWER_DEC,                                      //正用功电能  小数位
+	XY_LINE_NET,													// 接线方式
+	XY_CT,															//  电流变比			
+//    流量计参数    
+    FLOW_TRANSIENT_FLOW,                                            // 瞬时流量  
+    FLOW_FREQUENCY,                                                    // 频率
+    FLOW_PRESSURE,                                                    // 压力
+    FLOW_TEMP,                                                        // 温度
+    FLOW_DENSITY,                                                    // 密度 
+    FLOW_TOTAL_FLOW,                                                // 累积流量    
+    FLOW_NUMBER,                                                    // 流量计站号
+    
+}VFD_XY_ENYM;
+
+#endif
+
+
+#define Int  0
+#define Str  1
+#define Flo  2 
+#define Hex  3 
+#define Bit  4 
+
+#define Dec0  0
+#define Dec1  1
+#define Dec2  2 
+#define Dec3  3 
+#define Dec4  4 
+
+#define W_F 0
+#define W_T 1
+
+#define S_F 0
+#define S_T 1
+
+#define PLT_DATA_LIST_MAX    182  //86+96    
+#define PLT_Mam860_DATA_LIST_MAX  37  //27+5+5
+#define    XY_DATA_LIST_MAX    24
+#define H2U_PLC_LIST_MAX     46
+
+#define SERVER_DATA_MAX_BUF  20
+
+typedef struct {
+    
+    u16 Adrr[SERVER_DATA_MAX_BUF];
+    u16 Data[SERVER_DATA_MAX_BUF];
+    
+    u8 Start;
+    u8 End;
+    u8 Len;
+    u8 Flag;
+}SERVER_WRITER_DATA_STRUCT;
+
+
+
+PltExt bool RemoteWritePara;
+PltExt bool EnterPltParaWrite;
+PltExt bool    PltAlowWrite;
+
+PltExt void    GetPltAllPara( char *pBuf, u16 *pLen); 
+PltExt char    Plt1SysVarRead(u16 Addr, char *pBuf, u16 *pLen, ADDR_TYPE_ENUM *pType);
+PltExt char    Plt3SysVarRead(u16 Addr, char *pBuf, u16 *pLen, ADDR_TYPE_ENUM *pType);
+PltExt void    PltDevDataPrase(u16 Index, u16 Data, u8 Type);
+PltExt void    PltDevMan860DataPrase(u16 Index, u16 Data, u8 Type);
+PltExt u16     GetPltReadAddr(void);
+PltExt void    PltUsrHourAlarmCheck(void);
+PltExt void    PltParaWrite(MODBUS_HOST_STRUCT *pMdBus, u16 Nms);
+PltExt void   XYDevDataDeal(u8 *Data, u8 Len, u8 Type);
+PltExt char    XYMeterVarRead(u16 Addr, char *pBuf, u16 *pLen, ADDR_TYPE_ENUM *pType);
+PltExt bool PltSysVarWriter(u16 Addr, char *Pbuf);
+PltExt bool Server_Writer_Data_Buf(u16 addr, u16 data, u8 Len);
+PltExt bool Server_Writer_Data_SendBuf(u16 *addr, u16 *data);
+
+void Plt_PreAlarm_Deal(u16 Code);
+void Plt_RunStata_Deal(u16 Code);
+void Plt_Fault_Deal(u16 Code);
+void  GetPlt1SpecPara(u8 pstype, char *pBuf);
+void  GetPlt2SpecPara(char *pBuf);
+void  GetPlt3SpecPara(char *pBuf);
+void  GetMeterReadAddr(u16 *DatAddr, u8 *DatLen);
+void  GetMeter2ReadAddr(u16 *DatAddr, u8 *DatLen);
+void  PltMam6080OtherDataPrase(u16 Index, u16 Data);
+char    PltMam6080OtherVarRead(u16 Addr, char *pBuf, u16 *pLen, ADDR_TYPE_ENUM *pType);
+#endif
+

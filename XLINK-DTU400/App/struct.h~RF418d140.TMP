@@ -1,0 +1,804 @@
+#ifndef _STRUCT_H_
+#define    _STRUCT_H_
+
+#include "typedef.h"
+#include <stdint.h>
+
+#ifndef TRUE
+#define    TRUE                1
+#endif
+
+#ifndef FALSE
+#define    FALSE                0
+#endif
+
+#include "app_cfg.h"
+#include "gprscfg.h"
+
+
+typedef enum {
+    PROTOCOL_UDP = 0,
+    PROTOCOL_TCP    
+}PROTOCOL_ENUM;    
+
+
+typedef enum {
+    DTU_AT_MODE = 0,                                                //  AT模式
+    DTU_ONLINE_NORMAL,                                              //  永远在线模式
+    DTU_ONLINE_WAKEUP,                                              //  唤醒在线模式
+    DTU_ONLINE_REQUIRED                                             //  按需在线模式
+}DTU_MOED;
+
+
+
+typedef enum {
+    BOOT_TYPE_HMI = 1,                                              //  触摸屏开机
+    BOOT_TYPE_KEY,                                                  //  按键开机
+    BOOT_TYPE_SERVER,                                               //  远程开机 
+    BOOT_TYPE_TIMER,                                                //  定时开机
+        BOOT_TYPE_LINK,                                                                                                    //  联动开机
+        BOOT_TYPE_REBOOT,                                               //  复位开机
+        BOOT_TYPE_COM_RECOVER,                                                                                    // 通信恢复开机
+}BOOT_TYPE_ENUM;                                                    //  开机类型
+
+typedef enum {
+    STOP_TYPE_HMI = 1,                                              //  触摸屏停机
+    STOP_TYPE_KEY,                                                  //  按键停机
+    STOP_TYPE_SERVER,                                               //  远程停机 
+    STOP_TYPE_TIMER,                                                //  定时停机
+        STOP_TYPE_LINK,
+        STOP_TYPE_URGENT,                                               //  急停
+    STOP_TYPE_ALARM,                                                //  报警停机
+    STOP_TYPE_COM_FAULT                                                                                            //通信故障停机
+}STOP_TYPE_ENUM;                                                    //  停机类型
+
+
+
+typedef enum {
+    RESET_TYPE_POWERON = 1,                                         //  上电复位
+    RESET_TYPE_WDOG,                                                //  看门狗复位
+    RESET_TYPE_PIN,                                                 //  管脚复位
+    RESET_TYPE_SOFT,                                                //  软件复位
+    RESET_TYPE_OTHER,                                               //  其他    
+}RESET_TYPE_ENUM;                                                   //  复位类型
+
+
+typedef struct {
+    struct {
+        char Idle:  1;
+        char SndReg:1;
+    }Bits;
+
+    unsigned short NoDataCnt;    
+}DTU_STATUS_INFO;
+
+
+typedef union {
+    char Flag;
+    struct {
+        char N2ms: 1;
+        char N20ms: 1;
+        char N50ms: 1;
+        char N500ms: 1;
+        char TimeChkOK: 1;                                          //  校时标识
+    }Bits;
+}TIME_FLAG_UNION;
+
+typedef union {
+    u32 Val;
+    struct {
+        u32 Flag: 1;
+        u32 Timer: 31;
+    }Bits;
+}DELAY_TIMER;
+
+
+
+
+#pragma pack(1)
+
+
+typedef union {
+    char Flag;
+    struct {
+        char Bit0: 1; 
+        char Bit1: 1;
+        char Bit2: 1;
+        char Bit3: 1;
+        char Bit4: 1;
+        char Bit5: 1;
+        char Bit6: 1;
+        char Bit7: 1;        
+    }Bits;
+}CHAR_UNION;
+
+/*******************************************************************
+                        系统参数结构体定义                       
+*******************************************************************/
+#define CT_GEAR_SMALL       0                                       //  互感器小量程
+#define CT_GEAR_BIG         1                                       //  互感器大量程
+
+#define FREQ_SELECT_50HZ    0                                       //  50Hz
+#define FREQ_SELECT_60HZ    1                                       //  60Hz
+    
+#define DRV_TYPE_AC         0                                       //  工频驱动
+#define DRV_TYPE_VFD        1                                       //  变频驱动
+
+#define BIT_PARA_FREQ_SELECT    0
+#define BIT_PARA_FAN_DRV_TYPE   1
+#define BIT_PARA_FAN_CT_GEAR    6
+
+
+//typedef union {
+//    u32 Flag;
+//    struct {        
+//        u32 FreqSelect: 1;                                          //  频率选择        0：50Hz     1：60Hz
+//        u32 FanDrvType: 1;                                          //  风机驱动        0：工频     1：变频器
+//        u32 FreeSleep:  1;                                          //  空久休眠        0：关闭     1：开启
+//        u32 PhaseSeqChk:1;                                          //  相序检测        0: 关闭     1: 开启
+//        u32 PowerRestart: 1;                                        //  断电自启        0：关闭     1：开启   
+//        u32 FanCurrChk: 1;                                          //  风机电流检测    0：关闭     1：开启
+//        u32 FanCTGear:  1;                                          //  风机互感器档位  0：小量程   1：大量程
+
+//        /**********以下参数暂未规划地址************/
+
+//    }Bits;
+//}BIT_PARA_STRUCT;
+//#define BIT_PARA_SIZE           sizeof(BIT_PARA_STRUCT)
+//#define BIT_PARA_START_ADDR     8200
+//#define BIT_PARA_END_ADDR       8206
+
+#define TOUCH_VER_SIZE          10
+#define DEV_ID_SIZE             10
+#define PCB_VER_SIZE            10
+#define APP_VER_SIZE            10
+#define MAC_SN_SIZE             20
+typedef struct {
+    char MachineSN[MAC_SN_SIZE];                                    //  机器编号    
+    u16 MacYear;                                                    //  机器出厂年
+    u16 MacMonth;                                                   //  机器出厂月
+    u16 MacDay;                                                     //  机器出厂日
+
+    char TOUCHVer[TOUCH_VER_SIZE];                                     //触摸屏版本
+
+    char AppVer[APP_VER_SIZE];                                      //  软件版本
+
+    char ID[DEV_ID_SIZE];                                           //  设备编号
+    u16 DevYear;                                                    //  设备出厂年
+    u16 DevMonth;                                                   //  设备出厂月
+    u16 DevDay;                                                     //  设备出厂日
+    
+    char PCBVer[PCB_VER_SIZE];                                      //  硬件版本
+    /**********以下参数暂未规划地址************/
+    struct {
+        u16 PS: 8;
+        u16 AlmSaveFlg: 1;                                          //  报警值存储
+    }Bits;
+    
+    u16 PasswordAdrr[3];                    //控制器写数据密码地址
+    u16 PasswordData[3];                    //控制器写数据密码值
+    
+    u16 MeterNum;                            //电表MODBUS地址
+    u16 FlowNum;                            //流量计MODBUS地址
+    u16 BindSatus;							// 控制器、电表、流量计绑定状态   bit0 控制器 bit1 电表 bit2 流量计 1：绑定 0：未绑定
+    u16 reserv;
+}DEV_PARA_STRUCT;
+
+                     
+#define PS_MAM_KY_G              123     //分体工频，MAM100/200/260/280A/300温度偏移20
+#define PS_MAM_KY_C              124     //分体变频，MAM100/200/260/280A/300温度偏移20
+#define PS_MAM260                  125     //温度偏移150 
+#define PS_MAM260A              126     //温度偏移145
+#define PS_MAM280                  127     //温度偏移125  
+
+#define PS_MAM660_670_680          118     //温度偏移50   未测试
+
+#define PS_MAM860_870_880          111     //温度偏移20已测试
+#define PS_MAM860C_880C          112     //温度偏移50  变频
+#define PS_MAM890                  113     //温度偏移20  变频
+
+#define PS_MAM6080_6090         190//101        //温度偏移50 标准版  已测试
+#define PS_MAM6090                 102     //普乐特MAM6090系列,温度差值50
+#define PS_MAM6080_1            103        //比6080多一些参数，由于程序的不兼容导致
+#define PS_MAM6070				104
+
+
+#define PS_HC                  101 //160   //汇川控制器
+//#define PS_TYPE_H2U_8A91G          131     //  
+//#define PS_TYPE_ATLAS_STD         141     //     阿特拉斯标准版
+#define CLASS_6080      1
+#define CLASS_860       2
+#define CLASS_860C      3
+#define CLASS_HC 		4
+
+#define PS_TYPE_XY_1942E        201     //  鑫宇XY194E电表
+
+
+#define DEV_PARA_SIZE           sizeof(DEV_PARA_STRUCT)
+#define DEV_PARA_START_ADDR     2500
+#define DEV_PARA_END_ADDR       2530
+
+typedef struct {
+    
+    u16 MainVfd_AlarmValue;                                         //  主变频报警值
+    u16 MainVfd_RunState;                                            //    主机变频运行状态
+    
+  //  u16 MainVfd_MaxFreq;                                            //  主机变频器最大频率
+    u16 MainVfd_TopLimitFreq;                                       //  主机变频器上限频率
+    u16 MainVfd_LowLimitFreq;                                         //  主机变频器下限频率
+    u16 MainVfd_AccelerateTime;                                     //  主机变频器加速时间
+    u16 MainVfd_DecelerateTime;                                     //  主机变频器减速时间
+    u16 MainVfd_Model;                                              //  主机变频器型号
+    
+    u16 FanVfd_AlarmValue;                                          //  风变频报警值
+    u16 FanVfd_RunState;                                            //    风机变频运行状态
+    
+  //  u16 FanVfd_MaxFreq;                                                //  风机变频器最大频率
+    u16 FanVfd_TopLimitFreq;                                           //  风机变频器上限频率
+    u16 FanVfd_LowLimitFreq;                                         //  风机变频器下限频率
+    u16 FanVfd_AccelerateTime;                                         //  风机变频器加速时间
+    u16 FanVfd_DecelerateTime;                                         //  风机变频器减速时间
+    u16 FanVfd_Model;                                               //  风机变频器型号
+    
+}VFD_PARA_STRUCT;
+
+#define VFD_ADDR_SIZE           sizeof(VFD_PARA_STRUCT)
+
+
+#define GPRS_DOMAIN_SIZE        30
+#define GPRS_APN_SIZE           30
+#define GPRS_USR_SIZE           30
+#define GPRS_PWD_SIZE           30
+#define GPRS_YUECMD_SIZE        10
+#define GPRS_LLCMD_SIZE         10
+#define CARR_OPER_TEL_SIZE      10
+typedef struct {
+        char APN[GPRS_APN_SIZE];                                        //  接入点
+    char USR[GPRS_USR_SIZE];                                        //  用户名
+    char PWD[GPRS_PWD_SIZE];                                        //  密码
+    char Domain[GPRS_DOMAIN_SIZE];                                  //  服务器域名        
+    u16  Port;                                                      //  服务器端口
+    u16  Interval;                                                  //  心跳间隔
+    u16  RealTime_Monitor;                                            //实时监控时间
+    u16  Temp_Null;                                                    //保留字节，以及4字节对齐，否则读写Flash校验出错
+    
+}NET_PARA_STRUCT;
+
+#define NET_PARA_SIZE           sizeof(NET_PARA_STRUCT)
+#define NET_PARA_START_ADDR     2600
+#define NET_PARA_END_ADDR       2662
+
+typedef struct {    
+    u16 RunHour;                                                    //  机器运行总时间小时
+    u16 RunMinute;													//  机器运行总时间分钟
+    u16 LoadHour;                                                   //  负载运行总时间小时
+    u16 LoadMinute;													//	负载运行总时间分钟
+    u16 OilFiltHour;                                                //  油滤器使用时间
+    u16 OilSepaHour;                                                //  油分器使用时间
+    u16 GasFiltHour;                                                //  空滤器使用时间
+	u16 WaterFiltHour;
+    u16 lubeHour;                                                   //  润滑油使用时间
+    u16 GreaseHour;                                                 //  润滑脂使用时间
+	u16 BeltHour;
+    /**********以下参数暂未规划地址************/
+    u16 CurrentRunHour;											// 本次运行时间--小时
+    u16 CurrentRunMinute;										//本次运行时间 ---分钟
+    u32 TotalEle;                                                   //  历史总耗电,预留
+}RUN_HOUR_STRUCT;
+
+#define RUN_HOUR_SIZE           sizeof(RUN_HOUR_STRUCT)
+#define RUN_HOUR_START_ADDR     1998
+#define RUN_HOUR_END_ADDR       2008
+
+#define RUN_MIN_ADDR            2009                                 //  机器运行总时间分     
+#define LOAD_MIN_ADDR           2010                                 //  负载运行总时间分
+
+
+typedef struct {
+    u32 MaxUseTime;                                                 //  机器使用最大时限
+    u16 MaxOilFiltTime;                                             //  油滤器使用最大时间
+    u16 MaxOilSepaTime;                                             //  油分器使用最大时间
+    u16 MaxGasFiltTime;                                             //  空滤器使用最大时间
+    u16 MaxlubeTime;                                                //  润滑油使用最大时间
+	u16 MaxWaterFiltTime;
+    u16 MaxGreaseTime;                                              //  润滑脂使用最大时间
+	u16 Reserved;
+}MAX_TIME_STRUCT;
+#define MAX_TIME_SIZE           sizeof(MAX_TIME_STRUCT)
+#define MAX_TIME_START_ADDR     2100
+#define MAX_TIME_END_ADDR       2106
+
+
+typedef struct {
+    u16 RS485ErrCnt;                                                //  DTU和控制器之前的通信异常计次
+	u16 MeterErrCnt;
+	u16 FlowErrCnt;
+	u16 ParaWrErrCnt;                                               //  写参数异常计次
+    u16 Res;
+//    u16 FanVfd;                                                     //  风机变频通信异常计次
+}ERR_INFO_STRUCT;
+#define ERR_INFO_SIZE           sizeof(ERR_INFO_STRUCT)
+#define ERR_CNT_START_ADDR      100
+#define ERR_CNT_END_ADDR        101
+
+
+/*******************************************************************
+                        运行状态结构体定义                       
+*******************************************************************/
+
+typedef struct {
+    u16 Pressure1;                                                  //  压力值1
+    s16 Temprature1;                                                //  温度1
+    u16 CSQ;                                                        //  信号质量
+    u16 Pressure2;                                                  //  压力值2
+	u16 Pressure3;												// 油气桶压力
+	u16 WaterPressure;												//  水压
+    s16 Temprature2;                                                //  温度2
+    u16 Pres1AdcVolt;                                               //  压力1电压
+    u16 Pres2AdcVolt;                                               //  压力2电压
+    u16 Temp1AdcVolt;                                               //  温度1电压
+    u16 Temp2AdcVolt;                                               //  温度1电压
+    u16 MachineStat;                                                //  机器状态   
+	
+	/*************以上为已规划***********************/
+	u16 RunState;													// 运行状态： 运行、 停止
+    u16 LoadPress;
+    u16 UnLoadPress;
+    u16 StopPress;
+    u16 MaxUnloadPress;
+    u16 XinJiaoDelay;
+    u16 LoadDelay;
+    u16 StopDelay;
+    u16 StartDelay;
+    u16 MainDelay;
+    u16 FanDelay;
+    u16 UnloadDelay;
+    u16 UnblanceCurrent;
+
+    u8 UsrPassword[10];                                             //  用户密码
+    u8 FacPassword[10];                                             //  厂家密码
+    u16 PowerVolt;                                                  //  电源电压
+    u16 RS485ErrCnt;                                                //  485通信异常计次
+    u16 GPRSLac;
+    u32 GPRSCID;
+    u16 AlmVal;
+    u16 PreAlmVal;
+
+    u16 Front_Bear_Temp;                                            //前轴承温度
+    u16 Rear_Bear_Temp;                                                //后轴承温度
+    
+    u16 UpdataParaFlag:4;                                           //  第0位  保养参数有更新， 第1位 用户参数有更新  第2位  厂家参数有更新,第3位设备状态更新
+
+	u16 DTU_COMM_STATUS; 											//DTU 485通讯指示
+
+	u32 Total_Power;     				// 整机电量 （风机 + 主机）
+	u16 MatainAlarm;                  //保养报警状态字
+	
+}SHARE_STAT_STRUCT;
+
+
+typedef struct {  
+    u16 Volt_A;                                                           //  A相电压
+    u16 Volt_B;                                                           //  B相电压
+    u16 Volt_C;                                                           //  C相电压
+	u16 Volt_AB;
+	u16 Volt_BC;
+	u16 Volt_CA;
+	u16 Current_A;                                                  //  A相电流
+    u16 Current_B;                                                  //  B相电流
+    u16 Current_C;                                                  //  C相电流
+    
+    u16 Active_Power_Total;                                            //总有功功率
+    u16 Reactive_Power_Total;                                        //总无功功率
+    u16 Apparent_Power_Total;                                        //总视在功率
+    u16 Power_Factor_Total;                                            //总功率因素
+    u16 Frequency;                                                    //频率
+    u32 Positive_Active_Power;                                      //正用功电能  整数
+    u16 Positive_Active_Power_Dec;                                  //正用功电能  小数位
+	u16 Line_Net;													//接线方式
+	u16 CT;														    //电流变比   整数
+}XY_METER_STAT_STRUCT;                                                //鑫宇电表 数据状态结构体
+
+typedef union {
+    
+    float  F_Data;
+    char   Array[4];
+    
+    }IEEE_FLOAT_PARA;
+
+typedef struct {  
+    
+    IEEE_FLOAT_PARA Transient_Flow;                                                // 瞬时流量  
+    IEEE_FLOAT_PARA Frequency;                                                    // 频率
+    IEEE_FLOAT_PARA Pressure;                                                    // 压力
+    IEEE_FLOAT_PARA Temp;                                                        // 温度
+    IEEE_FLOAT_PARA Density;                                                    // 密度 
+    IEEE_FLOAT_PARA Total_Flow;                                                    // 累积流量    
+
+    u16 Number;                                                     // 流量计站号
+    u32 Specific_Power;                                                // 比功率    
+    u32 Energy_Unit;                                                // 单位能耗
+    
+}FLOW_METER_STAT_STRUCT;                                            // 流量计 数据结构体
+
+
+
+
+#define SHARE_STAT_SIZE         sizeof(SHARE_STAT_STRUCT)
+#define SHARE_STAT_START_ADDR   1
+#define SHARE_STAT_END_ADDR     30
+#define SHARE_STAT_NUM          (SHARE_STAT_END_ADDR-SHARE_STAT_START_ADDR+1)
+
+
+typedef union {
+    u32 Flag;
+    struct {
+        u32 Reserved:1;
+        u32 LackWater: 1;                                           //  ????
+        u32 LackPhase: 1;                                              //  ????            
+        u32 PluseError: 1;                                          //  ??????
+        u32    AxialTemperOver: 1;                                        //???????                                    //    ???????
+
+        u32 MainVfdAlarm: 1;                                        //  ??????
+        u32 Reserved1: 1;//MainVfdComErr: 1;                        //  ?????????
+        u32 OverMaxCurr: 1;                                         //  ????
+        u32 MainCurrFault: 1;                                       //  ??????(??????)
+        u32 CurrImbalance: 1;                                       //  ???????
+        
+        u32 FanVfdAlarm: 1;                                         //  ??????            
+        u32 Reserved2: 1;//FanVfdComErr:  1;                        //  ????????? 
+        u32 FanOverCurr: 1;                                         //  ????
+        u32 FanCurrFault:  1;                                       //  ??????(??????)
+        u32 FanCurrImbalance: 1;                                    //  ???????
+            
+        u32 OverMaxPres1: 1;                                        //  ??1????
+        u32 PresSen1Fault: 1;                                       //  ?????1????
+        
+        u32 OverMaxTemp1:  1;                                       //  ??1??????
+        u32 TempSen1Fault: 1;                                       //  ?????1????                                     
+        u32 OverMinTemp:   1;                                       //  ??????
+        u32 TempImbalance: 1;                                       //  ????????            
+        u32 OverMaxUsrHour: 1;                                      //  ????????
+        u32 SupplyVoltageOverMax: 1;                                //  ??????                                //     ??????
+        u32 SupplyVoltageOverMin: 1;                                //  ??????                                //     ??????
+       u32 RS485CommErr: 1;                                        //  DTU?????????
+       // u32 RS485MeterErr:1;									    //  DTU ?????????
+		//u32 RS485FlowErr:1;											//  DTU ?????????
+		//u32 Rs485ResErr:1;											// ???485 ????
+       // u32 Bit28_31: 4;            
+          u32 Bit24_31:8;                             
+    }Bits;
+}ALARM_FLAG_UNION;
+typedef union {
+    u32 Flag;
+    struct {
+     //   u32 OverMaxOilFiltTime: 1;                                  //  油滤器预警 
+    //    u32 OverMaxOilSepaTime: 1;                                  //  油分器预警
+    //    u32 OverMaxGasFiltTime: 1;                                  //  空滤器预警
+    //    u32 OverMaxlubeTime:    1;                                  //  润滑油预警
+    //    u32 OverMaxGreaseTime:  1;                                  //  润滑脂预警
+    //    u32 Bit5_7: 3;
+        
+   //     u32 Bit8_15: 8;
+        
+        u32 OverMinTemp: 1;                                        //  长时间低温运行预警
+        u32 OverMaxTemp: 1;                                        //  温度过高预警
+        u32 FrontTempHigh:1;
+        u32 oilDifference:1;
+        u32 WatarLevelHigh:1;
+        u32 WaterLevelLow:1;
+        u32 PipeBlock:1;
+        u32 Reserved:1;
+		
+        u32 Bit8_31: 24; 
+  
+    }Bits;
+}PREALM_FLAG_UNION;
+typedef union {
+    u32 Flag;
+    struct {
+        u32 DevPowerOn: 1;                                  //  设备加电
+        u32 DevStartUp: 1;                                  //  设备开机
+        u32 DevShutDown: 1;                                 //  设备停机
+        u32 Bit3_5: 3; 
+        
+        u32 DevStop:    1;                                  //  机器停止        
+        u32 LoadingRun:  1;                                 //  加载运行
+        u32 IdlerRun: 1;                                    // 空载运行        
+        u32 DevDormancy: 1;                                    // 空久休眠        
+        u32 Bit10_14: 5;                                    //  预留
+
+        u32 FanRun: 1;                                      //  风机启动
+        u32 FanStop: 1;                                        //  风机停止
+
+        u32 Bit17_31: 15;        
+    }Bits;
+}DEVALM_FLAG_UNION;
+
+
+
+
+typedef union {
+    u32 Flag;
+    struct {
+        u32 RouchScreenReboot: 1;                 //  触摸屏按键重启
+        u32 RtcFault: 1;                          //  RTC故障
+        u32 MemoryFault: 1;                       //  存储器故障
+        u32 MainVfdComErr: 1;                     //  主机变频器通信异常
+          u32 FanVfdComErr:  1;                     //  风机变频器通信异常 
+        
+        u32 Bit5_7: 3;
+        u32 Bit8_15: 8;
+        u32 Bit16_23: 8;
+        u32 Bit24_31: 8;        
+    }Bits;
+}OTHERS_ALM_FLAG_UNION;
+
+
+
+typedef struct{
+
+    u16 Key_Value;       //监控数据KEY值
+    u32 Addr;             //KEY值对应的控制器 地址
+    u8    DataLen;         //数据长度
+    u8  DataType: 3;     //数据类型：0整数，1：字符串，2：浮点类型，3:16进制显示，4：多状态位
+    u8    DecNum:3;         //DataType=2时，小数点位数，0、1、2、3、4
+    u8    WriterFlag:1;     //0：只读，1：可读写
+    u8    StorageFlag:1;     //0：不存储，1：需存储
+    
+}SYS_MONITOR_DATA_STRUCT;
+
+
+
+
+typedef struct{
+
+    u16 SysPressure;        // 系统压力
+    u16 PhaseProVolt;        // 相序保护电压
+    u16 OpenPhaseProVolt;    // 缺相保护电压
+    u16 Volt;                // 电压
+    u16 WarningValue;        // 预警值
+    u16 RunStatus;            // 运行状态
+    u16 Timing;                // 计时
+    u16 Fault;                // 故障
+    u16 FaultValue;            // 故障值
+    u16 OilPressDif;        // 油分压差
+    u16 MainStatus;            // 主机状态字
+    u16 MainFault;            // 主机故障字
+    u16 FanStatus;            // 风机状态字
+    u16 FanFault;            // 风机故障字
+    u32 MainPfreqPowerThis;    // 工频主机本次用电
+    u32 FanPfreqPowerThis;    // 工频风机本次用电
+    u32 MainPfreqUI;        // 工频主机UI
+    u32 FanPfreqUI;            // 工频风机UI
+    
+    
+    u16 TempUnit;                // 温度单位
+    u16 PressureUnit;            // 压力单位
+    u16 WarningStop;            // 预警过久停机
+    u16 FrontBearingWarnTemp;    // 前轴承预警温度
+    u16 FrontBearingAlarmTemp;    // 前轴承报警温度
+    u16 OilPressDifWarn;        // 油分预警压差
+    u16 OilPressDifAlarm;        // 油分报警压差
+    u16 DrainOpenDelay;            // 排水开延时
+    u16 DrainCloseDelay;        // 排水关延时
+    u16 SoftStartDelay;            // 软启延时
+    u16 AssistStartTime;        // 辅助启动时间
+    u16 AssistLoadDelay;        // 辅助加载延时
+    u16 AssistUnloadDelay;        // 辅助卸载延时
+    u16 AssistStartTemp;        // 辅助启温度
+    u16 LoadMode;                // 加载方式
+    u16 StartStopMode;            // 启停方式
+    u16 CorrespondMode;            // 通信方式
+    u16 LanguageSelection;        // 语言选择
+    u16 RunMode;                // 运行方式
+    u16 SysStopPressure;        // 系统停机压力
+    u16 HistoryFaultReset;        // 历史故障复位
+    u16 FactoryCode1;            // 出厂编码1
+    u16 FactoryCode2;            // 出厂编码2
+    u16 FactoryDate;            // 出厂日期
+    
+    
+    u16 MainIntegInitValue;        // 主机积分初值
+    u16 MainIntegRange;            // 主机积分范围
+    u16 MainRatioGain;            // 主机比例增益
+    u16 MainIntegGain;            // 主机积分增益
+    u16 MainDiffGain;            // 主机微分增益
+    u16 MainFreqToplimit;        // 主机频率上限
+    u16 MainFreqLowlimit;        // 主机频率下限
+    u16 MainIdlingFreq;            // 主机空载频率
+    u16 MainVfdNum;                // 主机变频器站号
+    u16 MainPIDPeriod;            // 主机PID周期
+    u16 MainVfdModel;            // 主机变频器型号
+    u16 FanIntegInitValue;        // 风机积分初值
+    u16 FanIntegRange;            // 风机积分范围
+    u16 FanRatioGain;            // 风机比例增益
+    u16 FanIntegGain;            // 风机积分增益
+    u16 FanDiffGain;            // 风机微分增益
+    u16 FanFreqToplimit;        // 风机频率上限
+    u16 FanFreqLowlimit;        // 风机频率下限
+    u16 FanIdlingFreq;            // 风机空载频率
+    u16 FanVfdNum;                // 风机变频器站号
+    u16 FanPIDPeriod;            // 风机PID周期
+    u16 FanVfdModel;            // 风机变频器型号
+    u16 VoltOvertop;            // 电压过高
+    u16 VoltOverlow;            // 电压过低
+    u16 CorrespondOverTime;        // 通信超时
+
+
+    u16 ReFreqPressure;            // 降频压力
+    u16 MainRiseRate;            // 主机上升速率
+    u16 MainDownRate;            // 主机下降速率
+    u16 MainPower;                // 主机功率
+    u16 MainRotationRate;        // 主机转速
+    u16 FanRiseRate;            // 风机上升速率
+    u16 FanDownRate;            // 风机下降速率
+    u16 FanPower;                // 风机功率
+    u16 FanRotationRate;        // 风机转速
+    u16 FanFreqStart;            // 变频风机启
+    u16 FanFreqStop;            // 变频风机停
+    u16 MainStopMode;            // 主机停机方式
+    u16 TimeStartStopFunc;        // 定时启停功能
+    u16 TimePressureFunc;        // 定时压力功能
+    u16 LowTempProtect;            // 低温保护
+    u16 MainVfdStartMode;        // 主变频器启动方式
+    u16 FanVfdStartMode;        // 风机变频器启动方式
+    u16 CorrespondStartVfdNum;    // 通信启变频器次数
+    u16 CorrespondStopVfdNum;    // 通信停变频器次数
+    u16 MainPfreqPowerFactor;    // 工频主机功率系数
+    u16 MainfreqPowerFactor;    // 变频主机功率系数
+    u16 FanPfreqPowerFactor;    // 变频风机功率系数
+    u16 FanfreqPowerFactor;        // 工频风机功率系数
+    u16 ProMainVfdDelay;        // 预开主机变频器延时
+    u16 PowerDownRestart;        // 掉电重启功能
+    u16 FreqSelect;                // 频率选择
+    u16 PipePressure;            // 管路压阻
+    u16 RearBearingWarnTemp;    // 后轴承预警温度
+    u16 RearBearingAlarmTemp;    // 后轴承停机温度
+    u16 LowWaterProtectTime;
+    u16 AutoChangeWaterActTime;  //自动换水动作
+    u16 AutoChangeWaterCycle;   //自动换水周期
+    u16 MaxUseTimeFunc; 		//最大使用时间功能
+   	u16 ValveState;            //阀门状态
+   	u16 MainIGBTemp;  		 // 主机IGBT温度
+   	u16 FaultStatus1;   
+   	u16 FaultStatus2;
+   	u16 FaultStatus3;   
+   	u16 FaultStatus4;
+    
+    
+}MAM6080_OTHER_PARA_STRUCT;
+
+/*******************************************************************
+                        参数地址宏定义                       
+*******************************************************************/
+#define SHARE_Pressure1_KEY                   1
+#define SHARE_Temprature1_KEY                 2
+#define SHARE_CSQ_KEY                         3
+#define SHARE_PowerVolt_KEY                 4
+#define SHARE_MachineStat_KEY                 5
+#define SHARE_MAIN_A_Current_KEY              6
+#define SHARE_MAIN_B_Current_KEY              7
+#define SHARE_MAIN_C_Current_KEY              8
+#define SHARE_FAN_A_Current_KEY               9
+#define SHARE_FAN_B_Current_KEY               10
+#define SHARE_FAN_C_Current_KEY               11
+#define SHARE_Pressure2_KEY                   12
+#define SHARE_Temprature2_KEY                 13
+
+#define MAIN_OutFreq_KEY                         40
+#define MAIN_OutSpeed_KEY                         41
+
+#define MAIN_OutCurrent_KEY                     42
+#define MAIN_OutVolt_KEY                         43
+#define MAIN_OutPower_KEY                         44
+#define FAN_OutFreq_KEY                         70
+#define FAN_OutSpeed_KEY                         71
+#define FAN_OutCurrent_KEY                         72
+#define FAN_OutVolt_KEY                         73
+#define FAN_OutPower_KEY                         74
+
+#define SIM_IMEI_KEY                             150
+#define SIM_SIMNum_KEY                           158
+#define SIM_GPRSLac_KEY                          166
+#define SIM_GPRSCID_KEY                          167
+
+#define MAIN_Power_Consume_Total_KEY             200
+#define POWER_Consume_Total_KEY                 202
+#define MAIN_PFREQ_Power_Consume_Total_KEY         204
+#define FAN_PFREQ_Power_Consume_Total_KEY         206
+#define FRONT_Bear_Temp_KEY                     208
+#define REAR_Bear_Temp_KEY                         209
+
+#define METER_VOLTAGE_A_KEY                      400                                        //  A相电压
+#define METER_VOLTAGE_B_KEY                      401                                        //  B相电压
+#define METER_VOLTAGE_C_KEY                      402                                        //  C相电压
+#define METER_CURRENT_A_KEY                      403                                     //  A相电流
+#define METER_CURRENT_B_KEY                      404                                     //  B相电流
+#define METER_CURRENT_C_KEY                      405                                     //  C相电流
+    
+#define METER_ACTIVE_POWER_TOTAL_KEY              406                                        //总有功功率
+#define METER_REACTIVE_POWER_TOTAL_KEY          407                                        //总无功功率
+#define METER_APPARENT_POWER_TOTAL_KEY          408                                        //总视在功率
+#define METER_POWER_FACTOR_TOTAL_KEY              409                                        //总功率因素
+#define METER_FREQUENCY_KEY                      410                                        //频率
+#define METER_POSITIVE_ACTIVE_POWER_KEY          411                                        //正用功电能  高位
+
+#define RUN_RunHour_KEY                         2000
+#define RUN_LoadHour_KEY                         2002
+#define RUN_OilFiltHour_KEY                     2004
+#define RUN_OilSepaHour_KEY                     2005
+#define RUN_GasFiltHour_KEY                     2006
+#define RUN_lubeHour_KEY                         2007
+#define RUN_GreaseHour_KEY                         2008
+#define HOUR_MaxUseTime_KEY                     2100
+#define HOUR_MaxOilFiltTime_KEY                 2102
+#define HOUR_MaxOilSepaTime_KEY                 2103
+#define HOUR_MaxGasFiltTime_KEY                 2104
+#define HOUR_MaxlubeTime_KEY                     2105
+#define HOUR_MaxGreaseTime_KEY                     2106
+
+#define SHARE_UnLoadPress_KEY                     2107
+#define SHARE_LoadPress_KEY                     2108
+#define MAIN_Cfreq_Press_KEY                     2109
+#define SHARE_StopPress_KEY                     2110
+#define SHARE_MaxUnloadPress_KEY                 2111
+#define FAN_StopTemp_KEY                         2112
+#define FAN_StartTemp_KEY                        2113
+#define FAN_Cfreq_Temp_KEY                         2114
+#define FAN_PreAlmTemp_KEY                         2115
+#define FAN_AlmTemp_KEY                         2116
+
+#define SHARE_StartDelay_KEY                     2118
+#define SHARE_LoadDelay_KEY                     2119
+#define SHARE_UnloadDelay_KEY                     2120
+#define SHARE_StopDelay_KEY                     2121
+#define MAIN_RateCurrent_KEY                     2326
+#define SHARE_MainDelay_KEY                       2328
+#define SHARE_XinJiaoDelay_KEY                    2329
+#define FAN_RateCurrent_KEY                       2366
+#define SHARE_UnblanceCurrent_KEY                 2327
+#define SHARE_FanDelay_KEY                        2368
+
+#define ADJ_Press1MinVolt_KEY   2200
+#define ADJ_Press1MaxVolt_KEY   2201
+#define ADJ_Press2MinVolt_KEY   2202
+#define ADJ_Press2MaxVolt_KEY   2203
+#define ADJ_Temp1MinVolt_KEY    2204
+#define ADJ_Temp1MaxVolt_KEY    2205
+#define ADJ_Temp2MinVolt_KEY    2206
+#define ADJ_Temp2MaxVolt_KEY    2207
+#define ADJ_PowerVoltageK_KEY   2208
+
+#define DEV_MachineSN_KEY         2500
+#define DEV_MacYear_KEY           2510
+#define DEV_MacMonth_KEY          2511
+#define DEV_MacDay_KEY            2512
+#define DEV_SCREENVer_KEY         2513
+#define DEV_AppVer_KEY            2518
+#define DEV_ID_KEY                2523
+#define DEV_DevYear_KEY           2528
+#define DEV_DevMonth_KEY          2529
+#define DEV_DevDay_KEY            2530
+
+#define NET_APN_KEY             2600  
+#define NET_USR_KEY             2615 
+#define NET_PWD_KEY             2630 
+#define NET_Domain_KEY          2645 
+#define NET_Port_KEY            2660 
+#define NET_Interval_KEY        2661 
+#define NET_Monitor_KEY         2662 
+
+#define PASSWORD_UsrSvr_KEY        3000
+#define PASSWORD_FacSvr_KEY        3005
+#define PASSWORD_SenSvr_KEY        3010
+
+
+
+#pragma pack()
+
+
+
+
+#endif
+

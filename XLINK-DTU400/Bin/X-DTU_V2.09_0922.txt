@@ -1,0 +1,6 @@
+目标文件:D:\iot\trunk\07 Embed\X-DTU\设计文档\软件源码\trunk\XLINK-DTU400\Bin\X-DTU_V2.09_0922.bin   大小:0x0001328C
+各部分大小如下:
+
+索引                        文件名                                            大小              偏移量            强制插入
+ 1      D:\iot\trunk\07 Embed\X-DTU\设计文档\软件源码\trunk\BOOT\Project\Bin\DTU-BOOT_V1.02.bin        0x00000E00        0x00000000             是
+ 2      D:\iot\trunk\07 Embed\X-DTU\设计文档\软件源码\trunk\XLINK-DTU400\Bin\X-DTU.bin        0x0001228C        0x00001000             是

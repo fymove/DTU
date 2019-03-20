@@ -1,0 +1,9 @@
+.\obj\simulation.o: ..\App\AppLayer\Simulation.c
+.\obj\simulation.o: ..\App\AppLayer\simulation.h
+.\obj\simulation.o: ..\App\struct.h
+.\obj\simulation.o: ..\App\typedef.h
+.\obj\simulation.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\obj\simulation.o: ..\App\app_cfg.h
+.\obj\simulation.o: ..\App\DevLayer\gprscfg.h
+.\obj\simulation.o: ..\App\AppLayer\app_para.h
+.\obj\simulation.o: ..\App\AppLayer\app_json.h
